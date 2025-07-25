@@ -86,7 +86,7 @@
     <input type="date" id="date" required>
 
     <label for="gallons">Gallons Sold:</label>
-    <input type="number" id="gallons" placeholder="Gallons sold" required>
+    <input type="number" id="gallons" placeholder="Gallons sold today" required>
 
     <label for="price">Price per Gallon ($):</label>
     <input type="number" id="price" placeholder="e.g. 3.75" required>
@@ -107,7 +107,19 @@
 
   <script>
     window.onload = function () {
+      // Hide form until login
       document.getElementById("fuelForm").style.display = "none";
+
+      // Auto-fill today’s date
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("date").value = today;
+
+      // Register service worker
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('🔧 Service Worker registered:', reg.scope))
+          .catch(err => console.error('Service Worker failed:', err));
+      }
     };
 
     function handleLogin() {
