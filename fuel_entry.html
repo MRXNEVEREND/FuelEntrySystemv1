@@ -2,20 +2,20 @@
 <html lang="en">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fuel Entry System</title>
+  <title>Fuel Inventory & Sales</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       font-size: 18px;
       margin: 0;
       padding: 30px 20px;
-      background-color: #f0f4f8;
+      background-color: #e1f0fd;
     }
 
     .container {
-      max-width: 500px;
+      max-width: 520px;
       margin: auto;
-      background: #fff;
+      background: linear-gradient(to right, #ffffff, #f2f9ff);
       padding: 25px;
       border-radius: 12px;
       box-shadow: 0 0 12px rgba(0,0,0,0.08);
@@ -24,7 +24,7 @@
     input, select, button {
       width: 100%;
       padding: 14px;
-      margin: 12px 0;
+      margin: 10px 0;
       font-size: 1.1rem;
       border: 1px solid #ccc;
       border-radius: 6px;
@@ -52,15 +52,12 @@
       display: none;
     }
 
-    @media (min-width: 420px) {
-      .container {
-        max-width: 540px;
-      }
-
-      input, select, button {
-        font-size: 1.2rem;
-        padding: 16px;
-      }
+    .totalBox {
+      background: #f0f8ff;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 20px;
+      text-align: center;
     }
   </style>
 </head>
@@ -74,10 +71,9 @@
 
   <div class="container" id="fuelForm">
     <h2>Fuel Entry</h2>
-    <label for="entryUser">User Name:</label>
     <input type="text" id="entryUser" readonly>
 
-    <label for="site">Location Name:</label>
+    <label for="site">Location:</label>
     <select id="site" required>
       <option value="">Select location</option>
       <option value="230">Station 230</option>
@@ -89,10 +85,24 @@
     <label for="date">Date:</label>
     <input type="date" id="date" required>
 
-    <label for="gallons">Gallons:</label>
-    <input type="number" id="gallons" placeholder="Enter gallons sold" required>
+    <label for="gallons">Gallons Sold:</label>
+    <input type="number" id="gallons" placeholder="Gallons sold" required>
+
+    <label for="price">Price per Gallon ($):</label>
+    <input type="number" id="price" placeholder="e.g. 3.75" required>
+
+    <label for="creditSales">Credit Sales ($):</label>
+    <input type="number" id="creditSales" placeholder="Enter credit sales" required>
+
+    <label for="endingInventory">Ending Inventory (Gallons):</label>
+    <input type="number" id="endingInventory" placeholder="Remaining fuel" required>
 
     <button onclick="submitEntry()">Submit Entry</button>
+
+    <div class="totalBox" id="summaryBox" style="display: none;">
+      <h3>✅ Summary</h3>
+      <p id="summaryText"></p>
+    </div>
   </div>
 
   <script>
@@ -108,11 +118,9 @@
         document.getElementById("loginContainer").style.display = "none";
         document.getElementById("fuelForm").style.display = "block";
         document.getElementById("entryUser").value = user;
-
-        // Optional: auto-select default location
         document.getElementById("site").value = "230";
       } else {
-        alert("Invalid credentials. Try: admin / 1234");
+        alert("Invalid credentials. Try admin / 1234");
       }
     }
 
@@ -120,14 +128,29 @@
       const user = document.getElementById("entryUser").value;
       const site = document.getElementById("site").value;
       const date = document.getElementById("date").value;
-      const gallons = document.getElementById("gallons").value;
+      const gallons = parseFloat(document.getElementById("gallons").value);
+      const price = parseFloat(document.getElementById("price").value);
+      const creditSales = parseFloat(document.getElementById("creditSales").value);
+      const endingInventory = parseFloat(document.getElementById("endingInventory").value);
 
-      if (!site || !date || !gallons) {
-        alert("Please fill all fields before submitting.");
+      if (!site || !date || isNaN(gallons) || isNaN(price) || isNaN(creditSales) || isNaN(endingInventory)) {
+        alert("🚫 Fill all fields with valid numbers");
         return;
       }
 
-      alert(`✅ Entry Saved:\nUser: ${user}\nLocation: ${site}\nDate: ${date}\nGallons: ${gallons}`);
+      const totalSales = gallons * price;
+
+      const summary = `
+        User: ${user}<br>
+        Location: ${site}<br>
+        Date: ${date}<br>
+        Total Sales: $${totalSales.toFixed(2)}<br>
+        Credit Sales: $${creditSales.toFixed(2)}<br>
+        Ending Inventory: ${endingInventory} gallons
+      `;
+
+      document.getElementById("summaryText").innerHTML = summary;
+      document.getElementById("summaryBox").style.display = "block";
     }
   </script>
 </body>
