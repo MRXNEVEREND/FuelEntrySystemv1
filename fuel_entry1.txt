@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fuel Entry</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    input, select, button { 
+      display: block; 
+      margin: 10px 0; 
+      padding: 8px; 
+      width: 100%; 
+      box-sizing: border-box; 
+    }
+  </style>
+</head>
+<body>
+  <h2>Fuel Entry</h2>
+  <form id="fuelForm">
+    <label>Date:</label>
+    <input type="date" name="date" required>
+
+    <label>Site:</label>
+    <select name="site" required>
+      <option value="">Select...</option>
+      <option value="SiteA">Site A</option>
+      <option value="SiteB">Site B</option>
+      <option value="SiteC">Site C</option>
+      <option value="SiteD">Site D</option>
+    </select>
+
+    <label>Gallons Sold:</label>
+    <input type="number" name="sold" required>
+
+    <label>Delivery Received:</label>
+    <input type="number" name="delivery" required>
+
+    <label>User Name:</label>
+    <input type="text" name="user" required>
+
+    <label>End Inventory:</label>
+    <input type="number" name="end_inventory" required>
+
+    <button type="submit">Submit ✅</button>
+  </form>
+
+  <div id="response"></div>
+
+  <script>
+    document.getElementById("fuelForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
+
+      fetch("https://your-api-endpoint.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.text())
+      .then(msg => {
+        document.getElementById("response").innerText = "✅ Submitted: " + msg;
+        e.target.reset();
+      })
+      .catch(err => {
+        document.getElementById("response").innerText = "❌ Error: " + err;
+      });
+    });
+  </script>
+</body>
+</html>
