@@ -6,8 +6,8 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #111;  /* Black */
-      color: #ccc;             /* Silver text */
+      background-color: #111;
+      color: #ccc;
       max-width: 500px;
       margin: auto;
       padding: 20px;
@@ -30,7 +30,7 @@
       width: 100%;
       padding: 10px;
       margin-bottom: 10px;
-      background-color: #222;       /* Silver-like dark input */
+      background-color: #222;
       color: #eee;
       border: 1px solid #555;
       border-radius: 4px;
@@ -108,14 +108,14 @@
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
-      // Basic dummy auth — update for production use
-      if (username === "admin" && password === "fuel123") {
+      // Corrected login credentials
+      if (username === "admin" && password === "1234") {
         document.getElementById("fuelForm").style.display = "block";
         document.getElementById("user").value = username;
         document.getElementById("username").disabled = true;
         document.getElementById("password").disabled = true;
       } else {
-        alert("Invalid login. Try admin / fuel123");
+        alert("Invalid login. Try: admin / 1234");
       }
     }
 
