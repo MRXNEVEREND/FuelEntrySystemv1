@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fuel Entry System</title>
   <style>
     body {
@@ -17,6 +17,7 @@
       background: #fff;
       padding: 20px;
       border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     input, select, button {
@@ -30,6 +31,10 @@
     #fuelForm {
       display: none;
     }
+
+    h2 {
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -42,36 +47,47 @@
 
   <div class="container" id="fuelForm">
     <h2>Fuel Entry</h2>
-    <label>User Name:</label>
+    <label for="entryUser">User Name:</label>
     <input type="text" id="entryUser" readonly>
 
-    <label>Location Name:</label>
+    <label for="site">Location Name:</label>
     <select id="site" required>
-      <option value="">Select...</option>
-      <option value="S001">Station Alpha</option>
-      <option value="S002">Station Bravo</option>
-      <option value="S003">Station Charlie</option>
-      <option value="S004">Station Delta</option>
+      <option value="">Select location</option>
+      <option value="230">Station 230</option>
+      <option value="289">Station 289</option>
+      <option value="1456">Station 1456</option>
+      <option value="1237">Station 1237</option>
     </select>
 
-    <label>Date:</label>
+    <label for="date">Date:</label>
     <input type="date" id="date" required>
 
-    <label>Gallons:</label>
+    <label for="gallons">Gallons:</label>
     <input type="number" id="gallons" placeholder="Enter gallons sold" required>
 
     <button onclick="submitEntry()">Submit Entry</button>
   </div>
 
   <script>
+    // Hide fuel form on page load
+    window.onload = function() {
+      document.getElementById("fuelForm").style.display = "none";
+    };
+
     function handleLogin() {
       const user = document.getElementById("username").value.trim();
       const pass = document.getElementById("password").value;
 
+      // Sample login logic
       if (user === "admin" && pass === "1234") {
         document.getElementById("loginContainer").style.display = "none";
         document.getElementById("fuelForm").style.display = "block";
         document.getElementById("entryUser").value = user;
+
+        // Optional: Auto-assign default location for user
+        if (user === "admin") {
+          document.getElementById("site").value = "230";
+        }
       } else {
         alert("Invalid credentials");
       }
@@ -88,7 +104,6 @@
         return;
       }
 
-      // This is where you'd process or save the entry
       alert(`Entry Saved:\nUser: ${user}\nLocation: ${site}\nDate: ${date}\nGallons: ${gallons}`);
     }
   </script>
