@@ -1,39 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fuel Entry System</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      font-size: 18px;
       margin: 0;
-      padding: 20px;
-      background-color: #f5f5f5;
+      padding: 30px 20px;
+      background-color: #f0f4f8;
     }
 
     .container {
-      max-width: 400px;
+      max-width: 500px;
       margin: auto;
       background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.08);
     }
 
     input, select, button {
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      font-size: 1rem;
+      padding: 14px;
+      margin: 12px 0;
+      font-size: 1.1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
       box-sizing: border-box;
+    }
+
+    button {
+      background-color: #0078D4;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 16px;
     }
 
     #fuelForm {
       display: none;
     }
 
-    h2 {
-      text-align: center;
+    @media (min-width: 420px) {
+      .container {
+        max-width: 540px;
+      }
+
+      input, select, button {
+        font-size: 1.2rem;
+        padding: 16px;
+      }
     }
   </style>
 </head>
@@ -69,8 +96,7 @@
   </div>
 
   <script>
-    // Hide fuel form on page load
-    window.onload = function() {
+    window.onload = function () {
       document.getElementById("fuelForm").style.display = "none";
     };
 
@@ -78,18 +104,15 @@
       const user = document.getElementById("username").value.trim();
       const pass = document.getElementById("password").value;
 
-      // Sample login logic
       if (user === "admin" && pass === "1234") {
         document.getElementById("loginContainer").style.display = "none";
         document.getElementById("fuelForm").style.display = "block";
         document.getElementById("entryUser").value = user;
 
-        // Optional: Auto-assign default location for user
-        if (user === "admin") {
-          document.getElementById("site").value = "230";
-        }
+        // Optional: auto-select default location
+        document.getElementById("site").value = "230";
       } else {
-        alert("Invalid credentials");
+        alert("Invalid credentials. Try: admin / 1234");
       }
     }
 
@@ -100,12 +123,13 @@
       const gallons = document.getElementById("gallons").value;
 
       if (!site || !date || !gallons) {
-        alert("Please fill all fields");
+        alert("Please fill all fields before submitting.");
         return;
       }
 
-      alert(`Entry Saved:\nUser: ${user}\nLocation: ${site}\nDate: ${date}\nGallons: ${gallons}`);
+      alert(`✅ Entry Saved:\nUser: ${user}\nLocation: ${site}\nDate: ${date}\nGallons: ${gallons}`);
     }
   </script>
 </body>
 </html>
+
