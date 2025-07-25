@@ -2,48 +2,123 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Fuel Entry</title>
+  <title>Fuel Entry App</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 500px; margin: auto; padding: 20px; }
-    label { font-weight: bold; margin-top: 10px; display: block; }
-    input { width: 100%; padding: 8px; margin-bottom: 10px; }
-    input[readonly] { background-color: #f0f0f0; }
-    button { padding: 10px 20px; cursor: pointer; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #111;  /* Black */
+      color: #ccc;             /* Silver text */
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #f0f0f0;
+      border-bottom: 1px solid #444;
+      padding-bottom: 5px;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      color: #aaa;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #222;       /* Silver-like dark input */
+      color: #eee;
+      border: 1px solid #555;
+      border-radius: 4px;
+    }
+
+    input[readonly] {
+      background-color: #333;
+      color: #bbb;
+    }
+
+    button {
+      background-color: #444;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #666;
+    }
+
+    #fuelForm {
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <h2>Fuel Entry</h2>
+  <h2>Login</h2>
+  <label for="username">Username:</label>
+  <input type="text" id="username" placeholder="Enter username">
 
-  <label for="user">User:</label>
-  <input type="text" id="user" value="admin" readonly>
+  <label for="password">Password:</label>
+  <input type="password" id="password" placeholder="Enter password">
 
-  <label for="location">Location:</label>
-  <input type="text" id="location" value="Station 230">
+  <button onclick="login()">Login</button>
 
-  <label for="date">Date:</label>
-  <input type="date" id="date" value="2025-07-25">
+  <div id="fuelForm">
+    <h2>Fuel Entry</h2>
 
-  <label for="gallonsSold">Gallons Sold:</label>
-  <input type="number" id="gallonsSold" placeholder="Gallons sold today">
+    <label for="user">User:</label>
+    <input type="text" id="user" readonly>
 
-  <label for="pricePerGallon">Price per Gallon ($):</label>
-  <input type="number" step="0.01" id="pricePerGallon" placeholder="e.g. 3.75">
+    <label for="location">Location:</label>
+    <input type="text" id="location" value="Station 230">
 
-  <label for="creditSales">Credit Sales ($):</label>
-  <input type="number" id="creditSales" placeholder="Enter credit sales">
+    <label for="date">Date:</label>
+    <input type="date" id="date" value="2025-07-25">
 
-  <label for="endingInventory">Ending Inventory (Gallons):</label>
-  <input type="number" id="endingInventory" placeholder="Remaining fuel">
+    <label for="gallonsSold">Gallons Sold:</label>
+    <input type="number" id="gallonsSold" placeholder="Gallons sold today">
 
-  <label for="totalSales">💰 Total Sales ($):</label>
-  <input type="text" id="totalSales" readonly>
+    <label for="pricePerGallon">Price per Gallon ($):</label>
+    <input type="number" step="0.01" id="pricePerGallon" placeholder="e.g. 3.75">
 
-  <label for="netCashSales">💵 Net Cash Sales ($):</label>
-  <input type="text" id="netCashSales" readonly>
+    <label for="creditSales">Credit Sales ($):</label>
+    <input type="number" id="creditSales" placeholder="Enter credit sales">
 
-  <button onclick="calculateSales()">Submit</button>
+    <label for="endingInventory">Ending Inventory (Gallons):</label>
+    <input type="number" id="endingInventory" placeholder="Remaining fuel">
+
+    <label for="totalSales">💰 Total Sales ($):</label>
+    <input type="text" id="totalSales" readonly>
+
+    <label for="netCashSales">💵 Net Cash Sales ($):</label>
+    <input type="text" id="netCashSales" readonly>
+
+    <button onclick="calculateSales()">Submit</button>
+  </div>
 
   <script>
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      // Basic dummy auth — update for production use
+      if (username === "admin" && password === "fuel123") {
+        document.getElementById("fuelForm").style.display = "block";
+        document.getElementById("user").value = username;
+        document.getElementById("username").disabled = true;
+        document.getElementById("password").disabled = true;
+      } else {
+        alert("Invalid login. Try admin / fuel123");
+      }
+    }
+
     function calculateSales() {
       const gallons = parseFloat(document.getElementById("gallonsSold").value) || 0;
       const price = parseFloat(document.getElementById("pricePerGallon").value) || 0;
@@ -58,4 +133,5 @@
   </script>
 </body>
 </html>
+
 
