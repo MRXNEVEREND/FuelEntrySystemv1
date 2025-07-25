@@ -1,170 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fuel Inventory & Sales</title>
+  <title>Fuel Entry Form</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 18px;
-      margin: 0;
-      padding: 30px 20px;
-      background-color: #e1f0fd;
-    }
-
-    .container {
-      max-width: 520px;
-      margin: auto;
-      background: linear-gradient(to right, #ffffff, #f2f9ff);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.08);
-    }
-
-    input, select, button {
-      width: 100%;
-      padding: 14px;
-      margin: 10px 0;
-      font-size: 1.1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      box-sizing: border-box;
-    }
-
-    button {
-      background-color: #0078D4;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #005fa3;
-    }
-
-    h2 {
-      text-align: center;
-      font-size: 24px;
-      margin-bottom: 16px;
-    }
-
-    #fuelForm {
-      display: none;
-    }
-
-    .totalBox {
-      background: #f0f8ff;
-      padding: 12px;
-      border-radius: 8px;
-      margin-top: 20px;
-      text-align: center;
-    }
+    body { font-family: sans-serif; max-width: 500px; margin: 20px auto; }
+    label { display: block; margin-top: 10px; }
+    input, select { width: 100%; padding: 8px; margin-top: 5px; }
+    .summary { background: #f0f0f0; padding: 10px; margin-top: 15px; }
   </style>
 </head>
 <body>
-  <div class="container" id="loginContainer">
-    <h2>Login</h2>
-    <input type="text" id="username" placeholder="Username" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button onclick="handleLogin()">Log In</button>
+
+<h2>Fuel Entry</h2>
+
+<script>
+  const useLivePreview = true; // Set to false for manual entry version
+
+  function updateTotals() {
+    if (!useLivePreview) return;
+    const gallons = parseFloat(document.getElementById("gallons").value) || 0;
+    const price = parseFloat(document.getElementById("price").value) || 0;
+    const total = gallons * price;
+    document.getElementById("totalSales").textContent = `$${total.toFixed(2)}`;
+  }
+</script>
+
+<form>
+  <label for="location">Location</label>
+  <select id="location">
+    <option value="">Select...</option>
+    <option value="230">230</option>
+    <option value="289">289</option>
+    <option value="1237">1237</option>
+    <option value="1456">1456</option>
+  </select>
+
+  <label for="gallons">Gallons Sold</label>
+  <input type="number" id="gallons" oninput="updateTotals()">
+
+  <!-- Conditional input sections based on config -->
+  <div id="priceSection" style="display: none;">
+    <label for="price">Price per Gallon ($)</label>
+    <input type="number" id="price" step="0.01" oninput="updateTotals()">
   </div>
 
-  <div class="container" id="fuelForm">
-    <h2>Fuel Entry</h2>
-    <input type="text" id="entryUser" readonly>
-
-    <label for="site">Location:</label>
-    <select id="site" required>
-      <option value="">Select location</option>
-      <option value="230">Station 230</option>
-      <option value="289">Station 289</option>
-      <option value="1456">Station 1456</option>
-      <option value="1237">Station 1237</option>
-    </select>
-
-    <label for="date">Date:</label>
-    <input type="date" id="date" required>
-
-    <label for="gallons">Gallons Sold:</label>
-    <input type="number" id="gallons" placeholder="Gallons sold today" required>
-
-    <label for="price">Price per Gallon ($):</label>
-    <input type="number" id="price" placeholder="e.g. 3.75" required>
-
-    <label for="creditSales">Credit Sales ($):</label>
-    <input type="number" id="creditSales" placeholder="Enter credit sales" required>
-
-    <label for="endingInventory">Ending Inventory (Gallons):</label>
-    <input type="number" id="endingInventory" placeholder="Remaining fuel" required>
-
-    <button onclick="submitEntry()">Submit Entry</button>
-
-    <div class="totalBox" id="summaryBox" style="display: none;">
-      <h3>✅ Summary</h3>
-      <p id="summaryText"></p>
-    </div>
+  <div id="manualTotalSection" style="display: none;">
+    <label for="manualTotal">Total Sales ($)</label>
+    <input type="number" id="manualTotal" step="0.01">
   </div>
 
-  <script>
-    window.onload = function () {
-      // Hide form until login
-      document.getElementById("fuelForm").style.display = "none";
+  <label for="creditSales">Credit Sales ($)</label>
+  <input type="number" id="creditSales" step="0.01">
 
-      // Auto-fill today’s date
-      const today = new Date().toISOString().split("T")[0];
-      document.getElementById("date").value = today;
+  <label for="inventory">Ending Inventory (gallons)</label>
+  <input type="number" id="inventory">
 
-      // Register service worker
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('🔧 Service Worker registered:', reg.scope))
-          .catch(err => console.error('Service Worker failed:', err));
-      }
-    };
+  <div class="summary">
+    <strong>Total Sales Preview:</strong> <span id="totalSales">$0.00</span>
+  </div>
 
-    function handleLogin() {
-      const user = document.getElementById("username").value.trim();
-      const pass = document.getElementById("password").value;
+  <button type="submit">Submit Entry</button>
+</form>
 
-      if (user === "admin" && pass === "1234") {
-        document.getElementById("loginContainer").style.display = "none";
-        document.getElementById("fuelForm").style.display = "block";
-        document.getElementById("entryUser").value = user;
-        document.getElementById("site").value = "230";
-      } else {
-        alert("Invalid credentials. Try admin / 1234");
-      }
-    }
+<script>
+  if (useLivePreview) {
+    document.getElementById("priceSection").style.display = "block";
+  } else {
+    document.getElementById("manualTotalSection").style.display = "block";
+    document.querySelector(".summary").style.display = "none";
+  }
+</script>
 
-    function submitEntry() {
-      const user = document.getElementById("entryUser").value;
-      const site = document.getElementById("site").value;
-      const date = document.getElementById("date").value;
-      const gallons = parseFloat(document.getElementById("gallons").value);
-      const price = parseFloat(document.getElementById("price").value);
-      const creditSales = parseFloat(document.getElementById("creditSales").value);
-      const endingInventory = parseFloat(document.getElementById("endingInventory").value);
-
-      if (!site || !date || isNaN(gallons) || isNaN(price) || isNaN(creditSales) || isNaN(endingInventory)) {
-        alert("🚫 Fill all fields with valid numbers");
-        return;
-      }
-
-      const totalSales = gallons * price;
-
-      const summary = `
-        User: ${user}<br>
-        Location: ${site}<br>
-        Date: ${date}<br>
-        Total Sales: $${totalSales.toFixed(2)}<br>
-        Credit Sales: $${creditSales.toFixed(2)}<br>
-        Ending Inventory: ${endingInventory} gallons
-      `;
-
-      document.getElementById("summaryText").innerHTML = summary;
-      document.getElementById("summaryBox").style.display = "block";
-    }
-  </script>
 </body>
 </html>
 
