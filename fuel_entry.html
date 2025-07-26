@@ -66,15 +66,17 @@
   </style>
 </head>
 <body>
-  <h2>Login</h2>
+  <h2 id="mainTitle">Login</h2>
 
-  <label for="username">Username:</label>
-  <input type="text" id="username" placeholder="Enter username">
+  <div id="loginForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" placeholder="Enter username">
 
-  <label for="password">Password:</label>
-  <input type="password" id="password" placeholder="Enter password">
+    <label for="password">Password:</label>
+    <input type="password" id="password" placeholder="Enter password">
 
-  <button onclick="login()">Login</button>
+    <button onclick="login()">Login</button>
+  </div>
 
   <div id="fuelForm">
     <h2>Fuel Entry</h2>
@@ -120,10 +122,10 @@
       const password = document.getElementById("password").value.trim();
 
       if (username === "admin" && password === "1234") {
+        document.getElementById("loginForm").style.display = "none";
         document.getElementById("fuelForm").style.display = "block";
         document.getElementById("user").value = username;
-        document.getElementById("username").disabled = true;
-        document.getElementById("password").disabled = true;
+        document.getElementById("mainTitle").textContent = "Fuel Entry";
       } else {
         alert("❌ Invalid login. Try: admin / 1234");
       }
